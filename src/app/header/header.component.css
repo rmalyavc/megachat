@@ -1,0 +1,41 @@
+.tool_icon {
+	position: relative;
+	height: 60%;
+	border-radius: 50%;
+	cursor: pointer;
+}
+.logo {
+	top: 20%;
+	left: 10px;
+}
+.login_icon {
+	margin-right: 10px;
+}
+.tool_icon:hover { 
+	transform: scale(1.15);
+	transition: transform 0.3s ease-in-out;
+	
+}
+.greeting:hover {
+	color: #ff1414;
+	transition: color 0.3s ease-in-out;
+}
+.tool_container {
+	position: relative;
+	height: 100%;
+	width: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.header_tools {
+	position: absolute;
+	height: 100%;
+	width: 30%;
+	min-width: 100px;
+	top: 0;
+	right: 10px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
