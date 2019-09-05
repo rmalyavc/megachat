@@ -1,0 +1,13 @@
+.main_button {
+	width: 50%;
+	height: 30px;
+	left: 25%;
+}
+
+.wrapper {
+	position: relative;
+	width: 30%;
+	max-width: 400px;
+	left: 35%;
+	/*border: 1px solid blue;*/
+}

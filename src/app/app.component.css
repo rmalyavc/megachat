@@ -1,0 +1,17 @@
+.app-header	{
+	position: absolute;
+	width: 100vw;
+	height: 60px;
+	top: 0;
+	left: 0%;
+	background: linear-gradient(#222222, #666666);
+}
+.main_section {
+	position: relative;
+	top: 65px;
+	width: 99vw;
+	height: 75vh;
+	border-top: 2px solid rgba(200, 200, 200, 0.1);
+	overflow-y: auto;
+	overflow-x: hidden;
+}

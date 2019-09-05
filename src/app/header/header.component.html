@@ -1,0 +1,6 @@
+<img [src]="logo" class="tool_icon logo" routerLink="/">
+<div class="header_tools">
+	<img *ngIf="current_user" [src]="logout" class="tool_icon login_icon">
+	<span *ngIf="current_user" class="white_text greeting">Hi, {{ current_user.login }}</span>
+	<img *ngIf="!current_user" [src]="login" class="tool_icon login_icon" routerLink="/login">
+</div>
