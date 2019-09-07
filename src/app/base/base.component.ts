@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class BaseComponent implements OnInit {
 	public current_user: any = true;
 	public show_loader: boolean = false;
-	public success: boolean = true;
+	public success: boolean = false;
 	public errors: string[] = [];
 	protected is_browser: boolean = true;
 
@@ -38,6 +38,7 @@ export class BaseComponent implements OnInit {
 
 	protected handle_request_error(need_alert: boolean = false, message: string = 'Unable proceed your request. Please contact system administrator.') {
 		this.success = false;
+		this.errors = [];
 		if (need_alert)
 			alert(message);
 		else
@@ -46,6 +47,41 @@ export class BaseComponent implements OnInit {
 	}
 
 	protected store_user(user) {
-		localStorage.setItem('current_user', JSON.stringify(user));
+		if (this.is_browser)
+			localStorage.setItem('current_user', JSON.stringify(user));
+	}
+
+	protected unstore_user() {
+		if (this.is_browser)
+			localStorage.removeItem('current_user');
+	}
+
+	protected logout() {
+		if (this.current_user) {
+			this.user_service.logout_user(this.current_user).subscribe(res => {
+				if (res.success) {
+					this.unstore_user();
+					this.redirect_to('/login', true);
+				}
+				else
+					this.handle_request_error(true, res.error);
+			}, err => {
+				this.handle_request_error(true);
+			});
+		}
+		else
+			this.redirect_to('/login');
+	}
+
+	protected check_login() {
+		this.user_service.is_logged(this.current_user).subscribe(res => {
+			if (!res.success)
+				this.handle_request_error(true);
+			else if (!res.data.is_logged) {
+				this.logout();
+			}
+		}, err => {
+			this.handle_request_error(true);
+		});
 	}
 }

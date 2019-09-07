@@ -9,9 +9,9 @@ declare var require: any
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent extends BaseComponent implements OnInit {
-	public logo = '/assets/logo.png';
-	public login = '/assets/login.png';
-	public logout = '/assets/logout.png';
+	public logo_icon = '/assets/logo.png';
+	public login_icon = '/assets/login.png';
+	public logout_icon = '/assets/logout.png';
 
 	ngOnInit() {
 		console.log(this.current_user);

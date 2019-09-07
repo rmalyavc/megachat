@@ -75,6 +75,10 @@ body {
 	text-align: center;
 }
 
+.invalid_field {
+	border: 1px solid rgba(255,0,0,0.8);
+}
+
 .main_button {
 	position: relative;
 	border-radius: 3px;
@@ -83,3 +87,14 @@ body {
 	cursor: pointer;
 }
 
+.form_wrapper {
+	position: relative;
+	width: 30%;
+	max-width: 400px;
+	left: 35%;
+	/*border: 1px solid blue;*/
+}
+
+.button_disabled {
+	opacity: 0.3;
+}
