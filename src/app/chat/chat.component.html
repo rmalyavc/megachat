@@ -1,3 +1,34 @@
-<p>
-  chat works!
-</p>
+<div class="rooms">
+	<div *ngFor="let room of rooms;" class="single_room" routerLink="/chat/{{room.room_id || room.user_id }}">
+		<div class="initials">
+			<span class="white_text">{{ room.initials }}</span>
+		</div>
+		<strong class="room_name">{{ room.full_name }}</strong>
+	</div>
+</div>
+<div class="room_wrapper">
+	<div class="messages_wrapper">
+		<h2 *ngIf="current_room.full_name" class="text_header gray_text">Chat with {{ current_room.full_name }}</h2>
+		<div *ngFor="let message of messages;" class="message_wrapper">
+			<div class="message" [class.owner]="message.author == current_user.id">{{ message.text }}</div>
+		</div>
+		<!-- <div class="message_wrapper">
+			<div class="message">
+				Test
+			</div>
+		</div>
+		<div class="message_wrapper">
+			<div class="message owner">
+				Owner Test
+			</div> -->
+		<!-- </div> -->
+	</div>
+	<div *ngIf="form_data.room_id" class="send_section">
+		<div class="field_container">
+			<textarea class="form_field" [(ngModel)]="form_data.message" [class.extended]="message" placeholder="Type your message here"></textarea>
+			<button class="main_button" (click)="send_message()">
+				<strong class="button_text white_text">Send</strong>
+			</button>
+		</div>
+	</div>
+</div>

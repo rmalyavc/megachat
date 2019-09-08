@@ -22,7 +22,7 @@ router.post('/logout', function(req, res, next) {
 });
 
 router.get('/check_login', function(req, res, next) {
-	let controller = require('./controllers/Login.js');
+	let controller = require('./controllers/Auth.js');
 	controller.is_logged(req, res);
 });
 

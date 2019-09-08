@@ -2,7 +2,7 @@ import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal';
 import { PLATFORM_ID, Component, OnInit, Inject } from '@angular/core';
 import { isPlatformBrowser} from '@angular/common';
 import { UserService } from '../user.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-base',
@@ -19,7 +19,8 @@ export class BaseComponent implements OnInit {
 	constructor(
 		@Inject(PLATFORM_ID) platform_id: string,
 		protected user_service: UserService,
-		protected router: Router
+		protected router: Router,
+		protected route: ActivatedRoute
 	) {
 		this.is_browser = isPlatformBrowser(platform_id);
 		console.log(this.is_browser);

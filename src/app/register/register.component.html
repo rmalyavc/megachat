@@ -11,6 +11,24 @@
 			</span>
 		</div>
 		<div class="field_container">
+			<input type="text" #first_name="ngModel" [class.invalid_field]="first_name.invalid && first_name.touched" name="first_name" class="form_field" placeholder="First Name" [(ngModel)]="form_data.first_name" minlength="3" required>
+			<span class="error_text" *ngIf="first_name.errors && first_name.errors.required && first_name.touched">
+				Should not be empty
+			</span>
+			<span class="error_text" *ngIf="first_name.errors && first_name.errors.minlength && first_name.touched">
+				Should be at least 3 characters length
+			</span>
+		</div>
+		<div class="field_container">
+			<input type="text" #last_name="ngModel" [class.invalid_field]="last_name.invalid && last_name.touched" name="last_name" class="form_field" placeholder="Last Name" [(ngModel)]="form_data.last_name" minlength="3" required>
+			<span class="error_text" *ngIf="last_name.errors && last_name.errors.required && last_name.touched">
+				Should not be empty
+			</span>
+			<span class="error_text" *ngIf="last_name.errors && last_name.errors.minlength && last_name.touched">
+				Should be at least 3 characters length
+			</span>
+		</div>
+		<div class="field_container">
 			<input type="password" #password="ngModel" name="password" class="form_field" placeholder="Password" [class.invalid_field]="password.invalid && password.touched" [(ngModel)]="form_data.password" minlength="8" required>
 			<span class="error_text" *ngIf="password.errors && password.errors.required && password.touched">
 				Should not be empty
@@ -37,8 +55,8 @@
 		<div class="field_container">
 			<p class="text_header"><a routerLink="/login">Login</a></p>
 		</div>
-		<button class="main_button" type="button" [class.button_disabled]="name.invalid || password.invalid || password_confirmation.invalid || e_mail.invalid || form_data.password != form_data.password_confirmation"
-		[disabled]="name.invalid || password.invalid || password_confirmation.invalid || e_mail.invalid || form_data.password != form_data.password_confirmation"
+		<button class="main_button" type="button" [class.button_disabled]="name.invalid || password.invalid || password_confirmation.invalid || e_mail.invalid || form_data.password != form_data.password_confirmation || first_name.invalid || last_name.invalid"
+		[disabled]="name.invalid || password.invalid || password_confirmation.invalid || e_mail.invalid || form_data.password != form_data.password_confirmation || first_name.invalid || last_name.invalid"
 		(click)="register()">
 			<strong class="button_text white_text">Register</strong>
 		</button>

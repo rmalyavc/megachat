@@ -3,19 +3,30 @@ var conn = require('./connection.js');
 
 function create_users() {
 	var sql = "CREATE TABLE IF NOT EXISTS users (\
-		id INT(6) AUTO_INCREMENT PRIMARY KEY,\
-		login VARCHAR(50) NOT NULL UNIQUE,\
+		id VARCHAR(36) NOT NULL PRIMARY KEY,\
+		login VARCHAR(100) NOT NULL UNIQUE,\
 		password VARCHAR(100) NOT NULL,\
 		email VARCHAR(255) NOT NULL UNIQUE,\
-		first_name VARCHAR(50),\
-		last_name VARCHAR(50),\
-		last_seen DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,\
-		connected TINYINT(1) NOT NULL DEFAULT 0\
+		first_name VARCHAR(100),\
+		last_name VARCHAR(100)\
 	)";
 	conn.query(sql, function(err) {
 		if (err)
 			console.log(err);
 	});
+}
+
+function create_logged_users() {
+	var sql = "CREATE TABLE IF NOT EXISTS logged_users (\
+		id VARCHAR(36) NOT NULL PRIMARY KEY,\
+		user_id VARCHAR(36) NOT NULL,\
+		token VARCHAR(36) NOT NULL,\
+		last_seen TIMESTAMP NOT NULL DEFAULT NOW()\
+	)";
+	conn.query(sql, function(err) {
+		if (err)
+			console.log(err);
+	});	
 }
 
 // function create_photo() {
@@ -42,17 +53,16 @@ function create_users() {
 
 function create_messages() {
 	var sql = "CREATE TABLE IF NOT EXISTS messages (\
-		id INT(11) AUTO_INCREMENT PRIMARY KEY,\
-		author INT(6) NOT NULL,\
-		dest_user INT(6),\
-		text VARCHAR(500) NOT NULL,\
-		time TIMESTAMP NOT NULL DEFAULT now(),\
-		room_id INT(6) NOT NULL\
+		id VARCHAR(36) NOT NULL PRIMARY KEY,\
+		author VARCHAR(36) NOT NULL,\
+		text VARCHAR(1000) NOT NULL,\
+		time TIMESTAMP NOT NULL DEFAULT NOW(),\
+		room_id VARCHAR(36) NOT NULL\
 	)";
 	var rel_sql = "CREATE TABLE IF NOT EXISTS message_user (\
-		id INT(11) AUTO_INCREMENT PRIMARY KEY,\
-		message_id INT(6) NOT NULL,\
-		user_id INT(6) NOT NULL,\
+		id VARCHAR(36) NOT NULL PRIMARY KEY,\
+		message_id VARCHAR(36) NOT NULL,\
+		user_id VARCHAR(36) NOT NULL,\
 		read_date TIMESTAMP NOT NULL DEFAULT now()\
 	)";
 	var queries = [sql, rel_sql];
@@ -66,14 +76,14 @@ function create_messages() {
 
 function create_rooms() {
 	var room_sql = "CREATE TABLE IF NOT EXISTS rooms (\
-	    id INT(6) AUTO_INCREMENT PRIMARY KEY,\
+	    id VARCHAR(36) NOT NULL PRIMARY KEY,\
 	    active TINYINT(1) NOT NULL DEFAULT 1,\
 	    private TINYINT(1) NOT NULL DEFAULT 1\
 	)";
 	var room_user_sql = "CREATE TABLE IF NOT EXISTS room_user (\
-		id INT(6) AUTO_INCREMENT PRIMARY KEY,\
-		room_id INT(6) NOT NULL,\
-	    user_id INT(6) NOT NULL\
+		id VARCHAR(36) NOT NULL PRIMARY KEY,\
+		room_id VARCHAR(36) NOT NULL,\
+	    user_id VARCHAR(36) NOT NULL\
 	)";
 	var queries = [room_sql, room_user_sql];
 	for (var i = 0; i < queries.length; i++) {
@@ -88,6 +98,7 @@ function create_rooms() {
 module.exports = {
 	install: function(res) {
 		create_users();
+		create_logged_users();
 		// create_photo();
 		create_messages();
 		create_rooms();

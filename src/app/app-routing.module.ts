@@ -19,6 +19,10 @@ const routes: Routes = [
 		component: RegisterComponent
 	},
 	{
+		path: 'chat/:room_id',
+		component: ChatComponent
+	},
+	{
 		path: 'chat',
 		component: ChatComponent
 	},

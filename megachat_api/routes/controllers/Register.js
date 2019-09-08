@@ -33,8 +33,8 @@ module.exports = {
 						login: data['login'],
 						password: hash.generate(data['password'], {algorithm: 'sha256'}),
 						email: data['email'],
-						first_name: data['first_name'] ? data['first_name'] : '',
-						last_name: data['last_name'] ? data['last_name'] : ''
+						first_name: data['first_name'] || '',
+						last_name: data['last_name'] || ''
 					}
 					await query(sql, new_user);
 					helper.send_success(res);

@@ -11,10 +11,11 @@ export class RegisterComponent extends LoginComponent implements OnInit {
 		login: '',
 		password: '',
 		password_confirmation: '',
-		email: ''
+		email: '',
+		first_name: '',
+		last_name: ''
 	};
-  // constructor() { }
-
+	
 	ngOnInit() {
 		console.log(this.form_data);
 	}
@@ -28,7 +29,6 @@ export class RegisterComponent extends LoginComponent implements OnInit {
 			else {
 				this.handle_request_error(false, res.error);
 			}
-			// this.ngOnInit(data);
 		}, error => {
 			this.handle_request_error();
 		});
