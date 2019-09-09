@@ -28,7 +28,7 @@ module.exports = {
 				}
 				else {
 					sql = "INSERT INTO users SET ?";
-					var new_user = {
+					let new_user = {
 						id: uuid(),
 						login: data['login'],
 						password: hash.generate(data['password'], {algorithm: 'sha256'}),
@@ -37,10 +37,29 @@ module.exports = {
 						last_name: data['last_name'] || ''
 					}
 					await query(sql, new_user);
+					sql = "SELECT id AS user_id, UUID() AS room_id\
+							FROM users\
+							WHERE is_bot = 1";
+					let rows = await query(sql);
+
+					let r_sql = "INSERT INTO rooms (id) VALUES ";
+					let ru_sql = "INSERT INTO room_user (id, room_id, user_id) VALUES ";
+					rows.forEach(function(row, index) {
+						if (index > 0) {
+							r_sql += ', ';
+							ru_sql += ', ';
+						}
+						r_sql += `('${row["room_id"]}')`;
+						ru_sql += `(UUID(), '${row["room_id"]}', '${new_user["id"]}')`;
+						ru_sql += `, (UUID(), '${row["room_id"]}', '${row["user_id"]}')`;
+					});
+					await query(r_sql);
+					await query(ru_sql);
 					helper.send_success(res);
 				}
 			}
 			catch(err) {
+				console.log(err);
 				helper.send_error(res);
 			}
 		}

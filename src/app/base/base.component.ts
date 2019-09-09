@@ -3,6 +3,7 @@ import { PLATFORM_ID, Component, OnInit, Inject } from '@angular/core';
 import { isPlatformBrowser} from '@angular/common';
 import { UserService } from '../user.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-base',
@@ -20,11 +21,14 @@ export class BaseComponent implements OnInit {
 		@Inject(PLATFORM_ID) platform_id: string,
 		protected user_service: UserService,
 		protected router: Router,
-		protected route: ActivatedRoute
+		protected route: ActivatedRoute,
+		protected socket: Socket
 	) {
 		this.is_browser = isPlatformBrowser(platform_id);
 		console.log(this.is_browser);
 		this.current_user = this.is_browser ? JSON.parse(localStorage.getItem('current_user') || 'false') : false;
+		if (this.current_user.id)
+			this.socket.emit('add_client', this.current_user.id);
 	}
 
 	ngOnInit() {

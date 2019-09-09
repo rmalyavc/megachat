@@ -14,6 +14,9 @@ import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { ChatComponent } from './chat/chat.component';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'http://localhost:3001', options: {}};
 
 @NgModule({
   declarations: [
@@ -27,6 +30,7 @@ import { ChatComponent } from './chat/chat.component';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    SocketIoModule.forRoot(config),
     AppRoutingModule,
     CommonModule,
     TransferHttpCacheModule,

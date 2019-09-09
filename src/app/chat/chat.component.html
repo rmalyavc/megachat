@@ -1,5 +1,5 @@
 <div class="rooms">
-	<div *ngFor="let room of rooms;" class="single_room" routerLink="/chat/{{room.room_id || room.user_id }}">
+	<div *ngFor="let room of rooms;" class="single_room" [class.room_selected]="room.room_id == form_data.room_id || room.user_id == form_data.room_id" routerLink="/chat/{{room.room_id || room.user_id }}">
 		<div class="initials">
 			<span class="white_text">{{ room.initials }}</span>
 		</div>
@@ -7,7 +7,7 @@
 	</div>
 </div>
 <div class="room_wrapper">
-	<div class="messages_wrapper">
+	<div class="messages_wrapper" #scrollMe [scrollTop]="scrollMe.scrollHeight">
 		<h2 *ngIf="current_room.full_name" class="text_header gray_text">Chat with {{ current_room.full_name }}</h2>
 		<div *ngFor="let message of messages;" class="message_wrapper">
 			<div class="message" [class.owner]="message.author == current_user.id">{{ message.text }}</div>
@@ -25,7 +25,7 @@
 	</div>
 	<div *ngIf="form_data.room_id" class="send_section">
 		<div class="field_container">
-			<textarea class="form_field" [(ngModel)]="form_data.message" [class.extended]="message" placeholder="Type your message here"></textarea>
+			<textarea class="form_field" [(ngModel)]="form_data.message" [class.extended]="form_data.message" placeholder="Type your message here"></textarea>
 			<button class="main_button" (click)="send_message()">
 				<strong class="button_text white_text">Send</strong>
 			</button>

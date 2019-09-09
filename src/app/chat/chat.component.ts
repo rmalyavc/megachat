@@ -3,6 +3,7 @@ import { BaseComponent } from '../base/base.component';
 import { UserService } from '../user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from '../message.service';
+import { Socket } from 'ngx-socket-io';
 
 @Component({
   selector: 'app-chat',
@@ -26,9 +27,14 @@ export class ChatComponent extends BaseComponent implements OnInit {
 		protected user_service: UserService,
 		protected router: Router,
 		protected route: ActivatedRoute,
-		protected message_service: MessageService
+		protected message_service: MessageService,
+		protected socket: Socket
 	) {
-		super(platform_id, user_service, router, route);
+		super(platform_id, user_service, router, route, socket);
+		this.socket.fromEvent('chat_message').subscribe(message => {
+        	console.log(message);
+        	this.messages.push(message);
+        });
 	}
 
 	ngOnInit() {
@@ -37,7 +43,6 @@ export class ChatComponent extends BaseComponent implements OnInit {
 		this.form_data['user_id'] = this.current_user.id;
 		this.route.params.subscribe(params => {
 			this.form_data['room_id'] = params['room_id'] || '';
-			console.log(this.form_data);
 			this.get_rooms();
 			if (this.form_data['room_id']) {
 				this.get_messages();
@@ -89,12 +94,11 @@ export class ChatComponent extends BaseComponent implements OnInit {
 
 	send_message() {
 		if (!this.form_data['message']) {
-			console.log('Message empty');
-			this.form_data['message'];
 			return ;
 		}
 		this.message_service.post_message(this.form_data).subscribe(res => {
 			if (res.success) {
+				this.socket.emit('send_message', res.data);
 				this.form_data['message'] = '';
 				this.get_messages();
 			}

@@ -8,7 +8,8 @@ function create_users() {
 		password VARCHAR(100) NOT NULL,\
 		email VARCHAR(255) NOT NULL UNIQUE,\
 		first_name VARCHAR(100),\
-		last_name VARCHAR(100)\
+		last_name VARCHAR(100),\
+		is_bot TINYINT(1) NOT NULL DEFAULT (0)\
 	)";
 	conn.query(sql, function(err) {
 		if (err)
@@ -92,6 +93,18 @@ function create_rooms() {
 				console.log(err);
 		});
 	}
+}
+
+function create_bots() {
+	let sql = "INSERT INTO users (id, login, password, email, first_name, last_name, is_bot) VALUES\
+		(UUID(), 'echo_bot', '', 'echo@bot.com', 'Echo', 'Bot', 1),\
+		(UUID(), 'reverse_bot', '', 'reverse@bot.com', 'Reverse', 'Bot', 1),\
+		(UUID(), 'spam_bot', '', 'spam@bot.com', 'Spam', 'Bot', 1),\
+		(UUID(), 'ignore_bot', '', 'ignore@bot.com', 'Ignore', 'Bot', 1)";
+	conn.query(sql, function(err) {
+		if (err)
+			console.log(err);
+	});
 }
 
 
