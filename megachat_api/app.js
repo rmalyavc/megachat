@@ -7,6 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var messageRouter = require('./routes/messages');
+var roomRouter = require('./routes/rooms');
 
 var app = express();
 var cors = require('cors');
@@ -83,6 +84,7 @@ app.use(cors());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/messages', messageRouter);
+app.use('/rooms', roomRouter);
 // app.use('/chat', chatRouter);
 
 // catch 404 and forward to error handler

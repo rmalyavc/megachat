@@ -6,6 +6,7 @@ var uuid = require('uuid/v4');
 
 module.exports = {
 	get_messages: async function(req, res) {
+		console.error('PARAMS2', req.params);
 		try {
 			let sql = "SELECT m.id, m.author, m.text, m.time, CONCAT(u.first_name, ' ', u.last_name) AS author_name\
 						FROM messages m\
@@ -25,19 +26,23 @@ module.exports = {
 	},
 	post_message: async function(req, res) {
 		try {
-			let sql = "INSERT INTO messages SET ?";
+			// let sql = "INSERT INTO messages SET ?";
 			let message = {
 				id: uuid(),
 				author: req.body.user_id,
 				text: req.body.message,
 				room_id: req.body.room_id
 			}
-			await query(sql, message);
+			let result = this.save_message(message)
 			helper.send_success(res, message);
 		}
 		catch(err) {
 			console.log(err);
 			helper.send_error(res);
 		}
+	},
+	save_message: async function(message) {
+		let sql = "INSERT INTO messages SET ?";
+		return await query(sql, message);
 	}
 }

@@ -1,14 +1,16 @@
 <div class="rooms">
 	<div *ngFor="let room of rooms;" class="single_room" [class.room_selected]="room.room_id == form_data.room_id || room.user_id == form_data.room_id" routerLink="/chat/{{room.room_id || room.user_id }}">
-		<div class="initials">
-			<span class="white_text">{{ room.initials }}</span>
-		</div>
-		<strong class="room_name">{{ room.full_name }}</strong>
+		<!-- <div *ngIf="room.full_name"> -->
+			<div class="initials">
+				<span class="white_text">{{ room.initials }}</span>
+			</div>
+			<strong class="room_name">{{ room.full_name }}</strong>
+		<!-- </div> -->
 	</div>
 </div>
 <div class="room_wrapper">
 	<div class="messages_wrapper" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-		<h2 *ngIf="current_room.full_name" class="text_header gray_text">Chat with {{ current_room.full_name }}</h2>
+		<h2 *ngIf="current_room && current_room.full_name" class="text_header gray_text">Chat with {{ current_room.full_name }}</h2>
 		<div *ngFor="let message of messages;" class="message_wrapper">
 			<div class="message" [class.owner]="message.author == current_user.id">{{ message.text }}</div>
 		</div>

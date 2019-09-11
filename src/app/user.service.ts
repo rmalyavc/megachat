@@ -9,22 +9,22 @@ import { BaseService } from './base.service';
 })
 export class UserService extends BaseService {
 	login_user(form_data: object = {}) {
-		this._url = `${this.base_url}/users/login`;
+		this._url = `${this.base_url}/users/session/create`;
 		return this.http.post<IResult>(this._url, form_data);
 	}
 
 	register_user(form_data: object = {}) {
-		this._url = `${this.base_url}/users/register`;
+		this._url = `${this.base_url}/users/create`;
 		return this.http.post<IResult>(this._url, form_data);
 	}
 
 	logout_user(current_user) {
-		this._url = `${this.base_url}/users/logout`;
+		this._url = `${this.base_url}/users/session/destroy`;
 		return this.http.post<IResult>(this._url, current_user);
 	}
 
 	is_logged(current_user) {
-		this._url = `${this.base_url}/users/check_login?token=${current_user.token}&user_id=${current_user.id}`;
+		this._url = `${this.base_url}/users/session/validate?token=${current_user.token}&user_id=${current_user.id}`;
 		return this.http.get<IResult>(this._url);
 	}
 }

@@ -52,7 +52,6 @@ export class ChatComponent extends BaseComponent implements OnInit {
 
 	get_rooms() {
 		this.message_service.get_rooms(this.current_user).subscribe(res => {
-			console.log(res);
 			if (res.success) {
 				this.rooms = res.data;
 			}
@@ -69,7 +68,6 @@ export class ChatComponent extends BaseComponent implements OnInit {
 
 	get_messages() {
 		this.message_service.get_messages(this.current_user, this.form_data['room_id']).subscribe(res => {
-			console.log(res);
 			if (res.success) {
 				if (this.form_data['room_id'] != res.data.room_id) {
 					this.form_data['room_id'] = res.data.room_id;
@@ -78,7 +76,7 @@ export class ChatComponent extends BaseComponent implements OnInit {
 				this.current_room = this.rooms.find((value, index, array) => {
 					return value['room_id'] == this.form_data['room_id'];
 				});
-
+				console.log(this.current_room);
 				this.messages = res.data.messages;
 			}
 			else {
