@@ -13,7 +13,13 @@ module.exports = {
 						INNER JOIN users u ON u.id = m.author\
 						WHERE m.room_id = ?\
 						ORDER BY m.time";
+			let message_user_sql = "INSERT INTO message_user\
+									SELECT UUID(), id, ?, NOW()\
+									FROM messages\
+									WHERE room_id = ?\
+									AND author <> ?";
 			let rows = await query(sql, req.query.room_id);
+			await query(message_user_sql, [req.query.user_id, req.query.room_id, req.query.user_id]);
 			helper.send_success(res, {
 				room_id: req.query.room_id,
 				messages: rows.length > 0 ? rows : []
@@ -26,14 +32,13 @@ module.exports = {
 	},
 	post_message: async function(req, res) {
 		try {
-			// let sql = "INSERT INTO messages SET ?";
 			let message = {
 				id: uuid(),
 				author: req.body.user_id,
 				text: req.body.message,
 				room_id: req.body.room_id
 			}
-			let result = this.save_message(message)
+			let result = await this.save_message(message)
 			helper.send_success(res, message);
 		}
 		catch(err) {
@@ -43,6 +48,6 @@ module.exports = {
 	},
 	save_message: async function(message) {
 		let sql = "INSERT INTO messages SET ?";
-		return await query(sql, message);
+		return query(sql, message);
 	}
 }

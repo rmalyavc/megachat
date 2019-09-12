@@ -14,6 +14,7 @@ export class HeaderComponent extends BaseComponent implements OnInit {
 	public logout_icon = '/assets/logout.png';
 
 	ngOnInit() {
+		console.log('This is header');
 		console.log(this.current_user);
 	}
 }

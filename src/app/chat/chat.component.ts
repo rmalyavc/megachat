@@ -4,6 +4,7 @@ import { UserService } from '../user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from '../message.service';
 import { Socket } from 'ngx-socket-io';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-chat',
@@ -11,16 +12,15 @@ import { Socket } from 'ngx-socket-io';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent extends BaseComponent implements OnInit {
-	private rooms: object[] = [];
-	private messages: object[] = [];
-	// private room_id: string = '';
-	private form_data: object = {
+	public rooms: Array<any> = [];
+	public messages: object[] = [];
+	public form_data: any = {
 		user_id: '',
 		room_id: '',
 		token: '',
 		message: ''
 	};
-	private current_room: object = {};
+	public current_room: any = {};
 
 	constructor(
 		@Inject(PLATFORM_ID) platform_id: string,
@@ -28,12 +28,25 @@ export class ChatComponent extends BaseComponent implements OnInit {
 		protected router: Router,
 		protected route: ActivatedRoute,
 		protected message_service: MessageService,
-		protected socket: Socket
+		protected socket: Socket,
+		protected meta: Meta
 	) {
-		super(platform_id, user_service, router, route, socket);
+		super(platform_id, user_service, router, route, /*socket,*/ meta);
 		this.socket.fromEvent('chat_message').subscribe(message => {
         	console.log(message);
-        	this.messages.push(message);
+        	if (message['room_id'] == this.current_room['room_id']) {
+        		this.messages.push(message);
+        		this.get_rooms();
+        		this.get_messages();
+        	}
+        	else {
+        		for (let i = 0; i < this.rooms.length; i++) {
+        			if (this.rooms[i]['room_id'] == message['room_id']) {
+        				this.rooms[i]['unread_messages']++;
+        				break ;
+        			}
+        		}
+        	}
         });
 	}
 
@@ -74,7 +87,12 @@ export class ChatComponent extends BaseComponent implements OnInit {
 					this.redirect_to(`/chat/${this.form_data['room_id']}`);
 				}
 				this.current_room = this.rooms.find((value, index, array) => {
-					return value['room_id'] == this.form_data['room_id'];
+					if (value['room_id'] == this.form_data['room_id']) {
+						this.rooms[index]['unread_messages'] = 0;
+						return true;
+					}
+					else
+						return false;
 				});
 				console.log(this.current_room);
 				this.messages = res.data.messages;
@@ -96,9 +114,9 @@ export class ChatComponent extends BaseComponent implements OnInit {
 		}
 		this.message_service.post_message(this.form_data).subscribe(res => {
 			if (res.success) {
-				this.socket.emit('send_message', res.data);
+				// this.socket.emit('send_message', res.data);
 				this.form_data['message'] = '';
-				this.get_messages();
+				// this.get_messages();
 			}
 			else {
 				this.handle_request_error(true, res.error);

@@ -19,31 +19,21 @@ var io = require('socket.io')(http, config);
 var clients = {};
 
 
-const chat_controller = require('./routes/controllers/Chat.js')
-io.on('connection', function(socket){
+const chat_controller = require('./routes/controllers/Chat.js');
+io.on('connection', function(socket) {
+	// console.log('ON CONNECTION SOCKET');
+	if (Object.keys(clients).length == 0)
+		chat_controller.start_spam_bot(io, clients);
+	
 	socket.on('add_client', function(user_id){
 		socket.user_id = user_id;
 	    clients[user_id] = {
 	    	"socket": socket.id
 	    };
 		console.log(clients);
-	  //   var sql = "UPDATE users SET connected = 1 WHERE id = ?";
-	  //   db.query(sql, socket.user_id, function(err) {
-	  //   	if (err)
-	  //   		console.log(err.sqlMessage);
-	  //   	else {
-			// 	var keys = Object.keys(clients);
-			// 	for (var i = 0; i < keys.length; i++) {
-			// 		if (io.sockets.connected[clients[keys[i]]['socket']] && keys[i] != socket.user_id)
-			// 			io.sockets.connected[clients[keys[i]]['socket']].emit('user_connected', {user_id: socket.user_id});
-			// 	}
-			// }
-	  //   });
 	});
 	socket.on('send_message', function(message){
-		console.log(message);
 		chat_controller.send_message(io, clients, message);
-		
 	});
 
 	// socket.on('friend_request', function(query) {

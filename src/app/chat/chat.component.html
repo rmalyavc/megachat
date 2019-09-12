@@ -5,14 +5,17 @@
 				<span class="white_text">{{ room.initials }}</span>
 			</div>
 			<strong class="room_name">{{ room.full_name }}</strong>
+			<div *ngIf="room.unread_messages" class="main_button unread_count">
+				<strong class="white_text">{{ room.unread_messages }}</strong>
+			</div>
 		<!-- </div> -->
 	</div>
 </div>
 <div class="room_wrapper">
 	<div class="messages_wrapper" #scrollMe [scrollTop]="scrollMe.scrollHeight">
 		<h2 *ngIf="current_room && current_room.full_name" class="text_header gray_text">Chat with {{ current_room.full_name }}</h2>
-		<div *ngFor="let message of messages;" class="message_wrapper">
-			<div class="message" [class.owner]="message.author == current_user.id">{{ message.text }}</div>
+		<div *ngFor="let message of messages;" class="message_wrapper" [class.owner]="message.author == current_user.id">
+			<div class="message">{{ message.text }}</div>
 		</div>
 		<!-- <div class="message_wrapper">
 			<div class="message">
@@ -27,7 +30,7 @@
 	</div>
 	<div *ngIf="form_data.room_id" class="send_section">
 		<div class="field_container">
-			<textarea class="form_field" [(ngModel)]="form_data.message" [class.extended]="form_data.message" placeholder="Type your message here"></textarea>
+			<textarea class="form_field" [(ngModel)]="form_data.message" [class.extended]="form_data.message" placeholder="Type your message here" maxlength="1000"></textarea>
 			<button class="main_button" (click)="send_message()">
 				<strong class="button_text white_text">Send</strong>
 			</button>
