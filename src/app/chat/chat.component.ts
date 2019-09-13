@@ -3,8 +3,6 @@ import { BaseComponent } from '../base/base.component';
 import { UserService } from '../user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from '../message.service';
-// import { Socket } from 'ngx-socket-io';
-import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-chat',
@@ -27,14 +25,11 @@ export class ChatComponent extends BaseComponent implements OnInit {
 		protected user_service: UserService,
 		protected router: Router,
 		protected route: ActivatedRoute,
-		protected message_service: MessageService,
-		// protected socket: Socket,
-		protected meta: Meta
+		protected message_service: MessageService
 	) {
-		super(platform_id, user_service, router, route, /*socket,*/ meta);
+		super(platform_id, user_service, router, route);
 		if (this.socket) {
 			this.socket.fromEvent('chat_message').subscribe(message => {
-	        	console.log(message);
 	        	if (message['room_id'] == this.current_room['room_id']) {
 	        		this.messages.push(message);
 	        		this.get_rooms();
@@ -86,7 +81,7 @@ export class ChatComponent extends BaseComponent implements OnInit {
 			if (res.success) {
 				if (this.form_data['room_id'] != res.data.room_id) {
 					this.form_data['room_id'] = res.data.room_id;
-					this.redirect_to(`/chat/${this.form_data['room_id']}`);
+					this.redirect_to(`/chat/${this.form_data['room_id']}`, true);
 				}
 				this.current_room = this.rooms.find((value, index, array) => {
 					if (value['room_id'] == this.form_data['room_id']) {
@@ -96,14 +91,10 @@ export class ChatComponent extends BaseComponent implements OnInit {
 					else
 						return false;
 				});
-				console.log(this.current_room);
 				this.messages = res.data.messages;
 			}
 			else {
-				if (res.error == '401')
-					this.check_login();
-				else
-					this.handle_request_error(false, res.error);
+				this.handle_request_error(false, res.error);
 			}
 		}, err => {
 			this.handle_request_error();
@@ -119,7 +110,6 @@ export class ChatComponent extends BaseComponent implements OnInit {
 				if (this.socket)
 					this.socket.emit('send_message', res.data);
 				this.form_data['message'] = '';
-				// this.get_messages();
 			}
 			else {
 				this.handle_request_error(true, res.error);

@@ -1,10 +1,9 @@
 import { LOCAL_STORAGE , WINDOW} from '@ng-toolkit/universal';
 import { PLATFORM_ID, Component, OnInit, Inject } from '@angular/core';
-import { isPlatformBrowser} from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { UserService } from '../user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Socket, SocketIoConfig } from 'ngx-socket-io';
-import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-base',
@@ -23,24 +22,15 @@ export class BaseComponent implements OnInit {
 		@Inject(PLATFORM_ID) platform_id: string,
 		protected user_service: UserService,
 		protected router: Router,
-		protected route: ActivatedRoute,
-		// protected socket: Socket,
-		protected meta: Meta
+		protected route: ActivatedRoute
 	) {
-		this.meta.addTags([
-			{name: 'title', content: 'Megachat42'},
-			{name: 'description', content: 'Welcome o our best chat service =)'},
-			{name: 'keywords', content: 'Angular, Meta Service'}
-		]);
 		this.is_browser = isPlatformBrowser(platform_id);
-		console.log(this.is_browser);
 		this.current_user = this.is_browser ? JSON.parse(localStorage.getItem('current_user') || 'false') : false;
 		if (this.current_user.id && this.is_browser) {
 			const config: SocketIoConfig = { url: 'http://localhost:3001', options: {}};
 			this.socket = new Socket(config);
 			this.socket.emit('add_client', this.current_user.id);
 		}
-		console.log('This is test');
 	}
 
 	ngOnInit() {
@@ -56,7 +46,9 @@ export class BaseComponent implements OnInit {
 	protected handle_request_error(need_alert: boolean = false, message: string = 'Unable proceed your request. Please contact system administrator.') {
 		this.success = false;
 		this.errors = [];
-		if (need_alert)
+		if (message == '401')
+			this.logout();
+		else if (need_alert && this.is_browser)
 			alert(message);
 		else
 			this.errors.push(message);

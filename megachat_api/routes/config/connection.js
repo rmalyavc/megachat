@@ -1,38 +1,42 @@
-var mysql = require('mysql');
+const mysql = require('mysql');
+const util = require('util');
 
-var conn = mysql.createConnection({
+
+const conn = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	// password: "11111111",
+	password: "11111111",
 	database: "megachat"
 });
 
-var db_conn = mysql.createConnection({
+const db_conn = mysql.createConnection({
 	host: "localhost",
-	user: "root"
-	// password: "11111111"
+	user: "root",
+	password: "11111111"
 });
 
-db_conn.connect(function(err) {
+const query = util.promisify(db_conn.query).bind(db_conn);
+
+db_conn.connect(async function(err) {
 	if (err)
 		throw err;
 	else {
-		var sql = "CREATE DATABASE IF NOT EXISTS megachat";
-		db_conn.query(sql, {}, function(err) {
-			conn_try = true;
+		let sql = "SHOW DATABASES LIKE 'megachat'";
+		let res = await query(sql);
+		sql = "CREATE DATABASE IF NOT EXISTS megachat";
+		await query(sql);
+		conn.connect(function(err) {
 			if (err)
 				throw err;
+			else {
+				if (res.length == 0) {
+					const controller = require('./install.js');
+					controller.install();
+				}
+				console.log('Connected to Database');
+			}
 		});
 	}
 });
-
-setTimeout(function() {
-	conn.connect(function(err) {
-		if (err)
-			console.log(err);
-		else
-			console.log('Connected to Database');
-	});		
-}, 1000);
 
 module.exports = conn;

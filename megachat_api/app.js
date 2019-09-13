@@ -18,11 +18,12 @@ var io = require('socket.io')(http, config);
 
 var clients = {};
 
-
 const chat_controller = require('./routes/controllers/Chat.js');
+
+// if (Object.keys(clients).length > 0)
+chat_controller.start_spam_bot(io, clients);
+
 io.on('connection', function(socket) {
-	if (Object.keys(clients).length == 0)
-		chat_controller.start_spam_bot(io, clients);
 	
 	socket.on('add_client', function(user_id){
 		socket.user_id = user_id;

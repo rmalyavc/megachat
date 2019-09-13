@@ -6,7 +6,6 @@ var uuid = require('uuid/v4');
 
 module.exports = {
 	get_messages: async function(req, res) {
-		console.error('PARAMS2', req.params);
 		try {
 			let sql = "SELECT m.id, m.author, m.text, m.time, CONCAT(u.first_name, ' ', u.last_name) AS author_name\
 						FROM messages m\

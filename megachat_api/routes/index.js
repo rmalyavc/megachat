@@ -7,8 +7,4 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/install', function(req, res, next) {
-	install.install(res);
-});
-
 module.exports = router;
