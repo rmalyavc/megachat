@@ -21,7 +21,6 @@ var clients = {};
 
 const chat_controller = require('./routes/controllers/Chat.js');
 io.on('connection', function(socket) {
-	// console.log('ON CONNECTION SOCKET');
 	if (Object.keys(clients).length == 0)
 		chat_controller.start_spam_bot(io, clients);
 	
@@ -30,26 +29,11 @@ io.on('connection', function(socket) {
 	    clients[user_id] = {
 	    	"socket": socket.id
 	    };
-		console.log(clients);
 	});
 	socket.on('send_message', function(message){
 		chat_controller.send_message(io, clients, message);
 	});
-
-	// socket.on('friend_request', function(query) {
-	// 	if (clients[query['user_id']])
-	// 		io.sockets.connected[clients[query['user_id']]['socket']].emit('friend_request');
-	// });
-
-	// socket.on('history_request', function(query) {
-	// 	if (clients[query['user_id']])
-	// 		io.sockets.connected[clients[query['user_id']]['socket']].emit('history_request');
-	// 	else
-	// 		console.log("User " + query['user_id'] + ' isn\'t connected');
-	// });
-
 	socket.on('disconnect', function () {
-		console.log('User ' + socket.user_id + ' is disconnected!');
 		if (!socket.user_id)
 			return ;
 		delete clients[socket.user_id];

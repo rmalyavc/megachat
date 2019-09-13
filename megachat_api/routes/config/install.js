@@ -9,7 +9,7 @@ function create_users() {
 		email VARCHAR(255) NOT NULL UNIQUE,\
 		first_name VARCHAR(100),\
 		last_name VARCHAR(100),\
-		is_bot TINYINT(1) NOT NULL DEFAULT (0)\
+		is_bot TINYINT(1) NOT NULL DEFAULT 0\
 	)";
 	conn.query(sql, function(err) {
 		if (err)
@@ -115,5 +115,6 @@ module.exports = {
 		// create_photo();
 		create_messages();
 		create_rooms();
+		create_bots();
 	}
 }

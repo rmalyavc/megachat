@@ -3,15 +3,14 @@ var mysql = require('mysql');
 var conn = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "11111111",
-	database: "megachat",
-	multipleStatements: true
+	// password: "11111111",
+	database: "megachat"
 });
 
 var db_conn = mysql.createConnection({
 	host: "localhost",
-	user: "root",
-	password: "11111111"
+	user: "root"
+	// password: "11111111"
 });
 
 db_conn.connect(function(err) {

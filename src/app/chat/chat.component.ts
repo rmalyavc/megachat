@@ -3,7 +3,7 @@ import { BaseComponent } from '../base/base.component';
 import { UserService } from '../user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from '../message.service';
-import { Socket } from 'ngx-socket-io';
+// import { Socket } from 'ngx-socket-io';
 import { Meta } from '@angular/platform-browser';
 
 @Component({
@@ -28,26 +28,28 @@ export class ChatComponent extends BaseComponent implements OnInit {
 		protected router: Router,
 		protected route: ActivatedRoute,
 		protected message_service: MessageService,
-		protected socket: Socket,
+		// protected socket: Socket,
 		protected meta: Meta
 	) {
 		super(platform_id, user_service, router, route, /*socket,*/ meta);
-		this.socket.fromEvent('chat_message').subscribe(message => {
-        	console.log(message);
-        	if (message['room_id'] == this.current_room['room_id']) {
-        		this.messages.push(message);
-        		this.get_rooms();
-        		this.get_messages();
-        	}
-        	else {
-        		for (let i = 0; i < this.rooms.length; i++) {
-        			if (this.rooms[i]['room_id'] == message['room_id']) {
-        				this.rooms[i]['unread_messages']++;
-        				break ;
-        			}
-        		}
-        	}
-        });
+		if (this.socket) {
+			this.socket.fromEvent('chat_message').subscribe(message => {
+	        	console.log(message);
+	        	if (message['room_id'] == this.current_room['room_id']) {
+	        		this.messages.push(message);
+	        		this.get_rooms();
+	        		this.get_messages();
+	        	}
+	        	else {
+	        		for (let i = 0; i < this.rooms.length; i++) {
+	        			if (this.rooms[i]['room_id'] == message['room_id']) {
+	        				this.rooms[i]['unread_messages']++;
+	        				break ;
+	        			}
+	        		}
+	        	}
+	        });
+		}
 	}
 
 	ngOnInit() {
@@ -114,7 +116,8 @@ export class ChatComponent extends BaseComponent implements OnInit {
 		}
 		this.message_service.post_message(this.form_data).subscribe(res => {
 			if (res.success) {
-				// this.socket.emit('send_message', res.data);
+				if (this.socket)
+					this.socket.emit('send_message', res.data);
 				this.form_data['message'] = '';
 				// this.get_messages();
 			}

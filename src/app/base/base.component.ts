@@ -3,7 +3,7 @@ import { PLATFORM_ID, Component, OnInit, Inject } from '@angular/core';
 import { isPlatformBrowser} from '@angular/common';
 import { UserService } from '../user.service';
 import { Router, ActivatedRoute } from '@angular/router';
-// import { Socket } from 'ngx-socket-io';
+import { Socket, SocketIoConfig } from 'ngx-socket-io';
 import { Meta } from '@angular/platform-browser';
 
 @Component({
@@ -17,6 +17,7 @@ export class BaseComponent implements OnInit {
 	public success: boolean = false;
 	public errors: string[] = [];
 	protected is_browser: boolean = true;
+	protected socket: any = false;
 
 	constructor(
 		@Inject(PLATFORM_ID) platform_id: string,
@@ -34,8 +35,11 @@ export class BaseComponent implements OnInit {
 		this.is_browser = isPlatformBrowser(platform_id);
 		console.log(this.is_browser);
 		this.current_user = this.is_browser ? JSON.parse(localStorage.getItem('current_user') || 'false') : false;
-		// if (this.current_user.id && this.is_browser)
-		// 	this.socket.emit('add_client', this.current_user.id);
+		if (this.current_user.id && this.is_browser) {
+			const config: SocketIoConfig = { url: 'http://localhost:3001', options: {}};
+			this.socket = new Socket(config);
+			this.socket.emit('add_client', this.current_user.id);
+		}
 		console.log('This is test');
 	}
 
