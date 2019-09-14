@@ -44,6 +44,12 @@ MIT
 @nguniversal/common
 MIT
 
+@nguniversal/express-engine
+MIT
+
+@ngx-meta/core
+MIT
+
 after
 MIT
 Copyright (c) 2011 Raynos.

@@ -6,10 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./not-found.component.css']
 })
 export class NotFoundComponent implements OnInit {
+	private img: string = '/assets/404.jpg';
 
-  constructor() { }
+	constructor() {}
 
-  ngOnInit() {
-  }
-
+	ngOnInit() {
+	}
 }

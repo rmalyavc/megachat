@@ -7,6 +7,7 @@ import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 
 import * as express from 'express';
 import {join} from 'path';
+const pathToRegexp = require('path-to-regexp');
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
@@ -39,7 +40,29 @@ app.get('*.*', express.static(DIST_FOLDER, {
 }));
 
 // All regular routes use the Universal engine
+app.use((req, res, next) => {
+	let valid = false;
+	const valid_paths = [
+		pathToRegexp('/'),
+		pathToRegexp('/login'),
+		pathToRegexp('/register'),
+		pathToRegexp('/chat/:room_id?')
+	];
+	if (req.url.endsWith('/') && req.url !== '/') {
+		res.status(301);
+	}
+	for (let i = 0; i < valid_paths.length; i++) {
+		if (valid_paths[i].exec(req.url)) {
+			valid = true;
+			break ;
+		}
+	}
+	if (!valid)
+		res.status(404);
+	next();
+})
+
 app.get('*', (req, res) => {
-  res.render('index', { req });
+	res.render('index', { req });
 });
 

@@ -16,8 +16,24 @@ import { RegisterComponent } from './register/register.component';
 import { ChatComponent } from './chat/chat.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core';
 
 const config: SocketIoConfig = { url: 'http://localhost:3001', options: {}};
+
+export function metaFactory(): MetaLoader {
+  return new MetaStaticLoader({
+    pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
+    pageTitleSeparator: ' - ',
+    applicationName: 'Megachat',
+    defaults: {
+      title: 'Mega Mega Chat )',
+      description: 'This is the best chat for the best',
+      'og:image': 'http://localhost:4000/assets/megachat.png',
+      'og:type': 'website',
+      'og:site_name': 'Megachat.com'
+    }
+  });
+}
 
 @NgModule({
   declarations: [
@@ -38,7 +54,11 @@ const config: SocketIoConfig = { url: 'http://localhost:3001', options: {}};
     TransferHttpCacheModule,
     HttpClientModule,
     NgtUniversalModule,
-    FormsModule
+    FormsModule,
+    MetaModule.forRoot({
+      provide: MetaLoader,
+      useFactory: (metaFactory)
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

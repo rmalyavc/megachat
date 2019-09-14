@@ -3,7 +3,7 @@ import { BaseComponent } from '../base/base.component';
 import { UserService } from '../user.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Socket, SocketIoConfig } from 'ngx-socket-io';
-import { Meta } from '@angular/platform-browser';
+import { SeoService } from '../seo.service';
 
 declare var require: any
 
@@ -22,16 +22,12 @@ export class HeaderComponent extends BaseComponent implements OnInit {
 		protected user_service: UserService,
 		protected router: Router,
 		protected route: ActivatedRoute,
-		protected meta: Meta
+		private seo_service: SeoService
 	) {
 		super(platform_id, user_service, router, route);
-		this.meta.addTags([
-			{name: 'title', content: 'Megachat'},
-			{name: 'description', content: 'Welcome o our best chat service =)'},
-			{name: 'keywords', content: 'Angular, Meta Service'}
-		]);
 	}
 
 	ngOnInit() {
+		this.seo_service.createLinkForCanonicalURL();
 	}
 }

@@ -21,7 +21,7 @@ var clients = {};
 const chat_controller = require('./routes/controllers/Chat.js');
 
 // if (Object.keys(clients).length > 0)
-chat_controller.start_spam_bot(io, clients);
+// chat_controller.start_spam_bot(io, clients);
 
 io.on('connection', function(socket) {
 	
