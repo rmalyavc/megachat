@@ -10,10 +10,6 @@ import { MetaGuard } from '@ngx-meta/core';
 
 export const routes: Routes = [
 	{
-	    path: 'login/',
-	    redirectTo: 'login'
-	},
-	{
 	    path: '',
 	    canActivateChild: [MetaGuard],
 	    children: [

@@ -20,9 +20,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
 	log_in() {
 		this.errors = [];
 		if (this.form_data['login'] && this.form_data['password']) {
-			console.log(this.form_data);
 			this.user_service.login_user(this.form_data).subscribe(res => {
-				// console.log(res);
 				if (res.success === true) {
 					this.store_user(res.data);
 					this.redirect_to('/', true);
@@ -35,7 +33,6 @@ export class LoginComponent extends BaseComponent implements OnInit {
 						email: ''
 					}
 					this.success = false;
-					// this.errors.push(res.error);
 					this.handle_request_error(false, res.error);
 				}
 			}, error => {

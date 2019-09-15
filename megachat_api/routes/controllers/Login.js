@@ -38,14 +38,14 @@ module.exports = {
 						}
 					}
 					catch(err) {
-						console.error(err);
+						console.log(err);
 						helper.send_error(res);
 					}
 				}
 			}
 		}
 		catch(err) {
-			console.error(err);
+			console.log(err);
 			helper.send_error(res);
 		}
 	},

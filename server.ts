@@ -39,7 +39,7 @@ app.get('*.*', express.static(DIST_FOLDER, {
   maxAge: '1y'
 }));
 
-// All regular routes use the Universal engine
+// Middleware to handle statuses for urls with end slashes and non-existing pages
 app.use((req, res, next) => {
 	let valid = false;
 	const valid_paths = [
@@ -62,6 +62,7 @@ app.use((req, res, next) => {
 	next();
 })
 
+// All regular routes use the Universal engine
 app.get('*', (req, res) => {
 	res.render('index', { req });
 });

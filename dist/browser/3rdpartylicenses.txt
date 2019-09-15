@@ -44,9 +44,6 @@ MIT
 @nguniversal/common
 MIT
 
-@nguniversal/express-engine
-MIT
-
 @ngx-meta/core
 MIT
 

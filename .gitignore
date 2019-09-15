@@ -1,0 +1,15 @@
+# compiled output
+/dist
+
+# dependencies
+/node_modules
+/megachat_api/node_modules
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+#System Files
+.DS_Store
+Thumbs.db
+!.gitkeep

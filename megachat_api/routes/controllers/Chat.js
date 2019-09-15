@@ -59,7 +59,6 @@ module.exports = {
 	},
 	start_spam_bot: async function(io, clients, timeout = 10000) {
 		try {
-			console.log(`TIMEOUT + ${timeout}`);
 			setTimeout(async () => {
 				let users = Object.keys(clients);
 				if (users.length > 0) {

@@ -17,7 +17,6 @@ export class RegisterComponent extends LoginComponent implements OnInit {
 	};
 	
 	ngOnInit() {
-		console.log(this.form_data);
 	}
 
 

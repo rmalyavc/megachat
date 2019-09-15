@@ -42,7 +42,7 @@ io.on('connection', function(socket) {
 });
 
 http.listen(3001, function(){
-  console.log('listening on *:3001');
+	console.log('Socket service is listening on *:3001');
 });
 
 // view engine setup
@@ -60,7 +60,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/messages', messageRouter);
 app.use('/rooms', roomRouter);
-// app.use('/chat', chatRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

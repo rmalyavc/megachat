@@ -37,9 +37,7 @@ module.exports = {
 									WHERE ru1.user_id = ? AND ru2.user_id = ?\
 									AND ru1.room_id = ru2.room_id)";
 			let rows = await query(sql, [req.params.room_id, req.params.room_id, req.query.user_id]);
-			console.log(rows);
 			if (rows.length > 0) {
-				// if (rows[0]['id'] != req.params.room_id)
 				req.query.room_id = rows[0]['id'];
 				next();
 			}
@@ -68,6 +66,3 @@ module.exports = {
 		}
 	}
 }
-
-// 11bf32cc-a003-4786-84fb-558320daff30 rmalyavc
-// d84139d6-d330-11e9-bfa8-d98e3b7ec86f echo_bot
