@@ -20,11 +20,11 @@ var clients = {};
 
 const chat_controller = require('./routes/controllers/Chat.js');
 
-// if (Object.keys(clients).length > 0)
-// chat_controller.start_spam_bot(io, clients);
+// Running spam bot recursion
+chat_controller.start_spam_bot(io, clients);
 
+// Socket handling logic
 io.on('connection', function(socket) {
-	
 	socket.on('add_client', function(user_id){
 		socket.user_id = user_id;
 	    clients[user_id] = {

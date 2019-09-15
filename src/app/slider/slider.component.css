@@ -1,0 +1,12 @@
+.text_header {
+	position: absolute;
+	top: 5px;
+	z-index: 2;
+}
+
+img {
+	position: relative;
+	height: 90%;
+	max-width: 100%;
+	margin-top: 50px;
+}

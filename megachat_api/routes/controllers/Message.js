@@ -7,6 +7,7 @@ var uuid = require('uuid/v4');
 module.exports = {
 	get_messages: async function(req, res) {
 		try {
+			// Getting all messages for specific room and marking all messages as read for current user
 			let sql = "SELECT m.id, m.author, m.text, m.time, CONCAT(u.first_name, ' ', u.last_name) AS author_name\
 						FROM messages m\
 						INNER JOIN users u ON u.id = m.author\

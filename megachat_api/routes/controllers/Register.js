@@ -9,11 +9,13 @@ var uuid = require('uuid/v4');
 module.exports = {
 	register: async function(req, res) {
 		let data = req.body;
+		// Validating input data
 		if (!validator.valid_register_data(data)) {
 			helper.send_error(res, 'Invalid Data');
 		}
 		else {
 			try {
+				// Checking if login and email are unique. If no, send error
 				let sql = "SELECT login, email FROM users WHERE login = ? OR email = ?";
 				let rows = await query(sql, [data['login'], data['email']]);
 				if (rows.length > 0) {
@@ -27,6 +29,7 @@ module.exports = {
 					helper.send_error(res, error);
 				}
 				else {
+					// Inserting new user to db
 					sql = "INSERT INTO users SET ?";
 					let new_user = {
 						id: uuid(),
@@ -37,6 +40,7 @@ module.exports = {
 						last_name: data['last_name'] || ''
 					}
 					await query(sql, new_user);
+					// Creating default rooms for all bots
 					sql = "SELECT id AS user_id, UUID() AS room_id\
 							FROM users\
 							WHERE is_bot = 1";

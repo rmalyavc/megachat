@@ -17,6 +17,8 @@ import { ChatComponent } from './chat/chat.component';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core';
+import { SliderComponent } from './slider/slider.component';
+
 
 const config: SocketIoConfig = { url: 'http://localhost:3001', options: {}};
 
@@ -44,7 +46,8 @@ export function metaFactory(): MetaLoader {
     LoginComponent,
     RegisterComponent,
     ChatComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    SliderComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

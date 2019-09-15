@@ -21,6 +21,7 @@ db_conn.connect(async function(err) {
 	if (err)
 		throw err;
 	else {
+		// Checking if database exists. If no creating it and run install script. Else just returning connection
 		let sql = "SHOW DATABASES LIKE 'megachat'";
 		let res = await query(sql);
 		sql = "CREATE DATABASE IF NOT EXISTS megachat";

@@ -7,12 +7,16 @@ import { IResult } from './Result';
 })
 export class MessageService extends BaseService {
 	get_rooms(current_user) {
-		this._url = `${this.base_url}/rooms?user_id=${current_user.id}&token=${current_user.token}`;
+		let d = new Date();
+		let t = d.getTime();
+		this._url = `${this.base_url}/rooms?user_id=${current_user.id}&token=${current_user.token}&t=${t}`;
 		return this.http.get<IResult>(this._url);
 	}
 
 	get_messages(current_user, room_id) {
-		this._url = `${this.base_url}/rooms/${room_id}?user_id=${current_user.id}&token=${current_user.token}`;
+		let d = new Date();
+		let t = d.getTime();
+		this._url = `${this.base_url}/rooms/${room_id}?user_id=${current_user.id}&token=${current_user.token}&t=${t}`;
 		return this.http.get<IResult>(this._url);
 	}
 

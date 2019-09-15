@@ -10,6 +10,7 @@ module.exports = {
 					FROM users\
 					WHERE login = ?";
 		try {
+			// Checking if user exists
 			let rows = await query(sql, req.body.login);
 			if (rows.length == 0) {
 				helper.send_error(res, 'User not found');
@@ -19,6 +20,7 @@ module.exports = {
 				if (!hash.verify(req.body.password, user.password)) {
 					helper.send_error(res, 'Invalid Password');
 				}
+				// If verified, then creating session record in db
 				else {
 					let del_sql = "DELETE FROM logged_users WHERE user_id = ?";
 					let ins_sql = "INSERT INTO logged_users (id, user_id, token) VALUES (UUID(), ?, UUID())";
@@ -51,6 +53,7 @@ module.exports = {
 	},
 	is_logged: async function(req, res) {
 		try {
+			// Checking if session is not expired. If no, then refresh the token
 			let sql = "SELECT id, user_id\
 						FROM logged_users\
 						WHERE token = ?\

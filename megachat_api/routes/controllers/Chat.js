@@ -31,9 +31,11 @@ module.exports = {
 
 			let rows = await query(sql, message.room_id);
 			rows.forEach(function(row, index) {
+				// If addressee is connected, then emit send message
 				if (clients[row['user_id']]) {
 					io.sockets.connected[clients[row['user_id']]['socket']].emit('chat_message', message);
 				}
+				// Reverse and echo bots logic
 				if (row['login'] == 'echo_bot' || row['login'] == 'reverse_bot') {
 					let timeout = row['login'] == 'reverse_bot' ? 3000 : 0;
 					setTimeout(async function() {
@@ -61,13 +63,16 @@ module.exports = {
 		try {
 			setTimeout(async () => {
 				let users = Object.keys(clients);
+				// If any users connected, then sending spam messages to them
 				if (users.length > 0) {
+					// Getting spam bot id, as it is generic and can be differnet in different databases
 					if (!spam_bot) {
 						let sql = "SELECT id FROM users WHERE is_bot = 1 AND login = 'spam_bot'";
 						let rows = await query(sql);
 						spam_bot = rows[0]['id'];
 					}
 					let user_list = "'" + users.join("','") + "'";
+					// Getting list of users to send spam too
 					let sql = `SELECT room_id, user_id\
 								FROM room_user \
 								WHERE room_id IN (SELECT DISTINCT ru1.room_id AS room_id\
@@ -79,6 +84,7 @@ module.exports = {
 					let messages = [];
 					let values = '';
 					sql = "INSERT INTO messages (id, author, text, room_id) VALUES ";
+					// Generating spam messages
 					rows.forEach(function(row, index) {
 						let new_message = {
 							id: uuid(),
@@ -92,6 +98,7 @@ module.exports = {
 						values += `('${new_message['id']}', '${spam_bot}', '${new_message['text']}', '${new_message['room_id']}')`;
 						messages.push(new_message);
 					});
+					// Saving messages to db and emitting them to clients
 					if (values) {
 						sql += values;
 						await query(sql);
@@ -102,6 +109,7 @@ module.exports = {
 						});
 					}
 				}
+				// Recursion with random interval
 				this.start_spam_bot(io, clients, get_random_number(10000, 120000));
 			}, timeout);
 		}

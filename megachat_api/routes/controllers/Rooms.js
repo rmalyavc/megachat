@@ -7,6 +7,7 @@ var uuid = require('uuid/v4');
 module.exports = {
 	get_rooms: async function(req, res) {
 		try {
+			// Getting all rooms or users' ids if rooms are not created for them yet
 			let sql = "SELECT r.id AS room_id, u.id AS user_id, u.login, CONCAT(u.first_name, ' ', u.last_name) AS full_name,\
 							(SELECT COUNT(*)\
 							FROM messages\
@@ -29,6 +30,7 @@ module.exports = {
 	},
 	check_room: async function (req, res, next) {
 		try {
+			// Checking if room is already exists.
 			let sql = "SELECT r.id\
 						FROM rooms r\
 						WHERE r.id = ?\
@@ -37,17 +39,35 @@ module.exports = {
 									WHERE ru1.user_id = ? AND ru2.user_id = ?\
 									AND ru1.room_id = ru2.room_id)";
 			let rows = await query(sql, [req.params.room_id, req.params.room_id, req.query.user_id]);
+			// If room exists, passing request further
 			if (rows.length > 0) {
 				req.query.room_id = rows[0]['id'];
+				// This should never happen, but just to make sure...
+				if (rows.length > 1) {
+					let ids = [];
+					rows.forEach(function(row, index) {
+						if (index > 0)
+							ids.push(row['id']);
+					});
+					let id_list = "'" + ids.join("', '") + "'";
+					sql = `DELETE r, ru\
+							FROM rooms r\
+							INNER JOIN room_user ru ON ru.room_id = r.id\
+							WHERE r.id IN (${id_list})`;
+					await query(sql, id_list);
+				}
 				next();
 			}
 			else {
+				// Checking if user_id passed instead of room_id
 				sql = "SELECT id FROM users WHERE id = ?";
 				rows = await query(sql, req.params.room_id);
+				// If user is not found too, then return error
 				if (rows.length == 0) {
 					helper.send_error(res, 'Room not found');
 				}
 				else {
+					// If user is found, then create new room and relationships
 					let user_id = req.params.room_id;
 					let room_id = uuid();
 					let r_sql = "INSERT INTO rooms SET ?";

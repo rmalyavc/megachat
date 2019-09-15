@@ -25,6 +25,7 @@ export class BaseComponent implements OnInit {
 		protected route: ActivatedRoute
 	) {
 		this.is_browser = isPlatformBrowser(platform_id);
+		// If runned in browser, then initialize current user and socket
 		this.current_user = this.is_browser ? JSON.parse(localStorage.getItem('current_user') || 'false') : false;
 		if (this.current_user.id && this.is_browser) {
 			const config: SocketIoConfig = { url: 'http://localhost:3001', options: {}};

@@ -1,0 +1,2 @@
+<h1 class="text_header gray_text">{{ banners[current_slide].heading }}</h1>
+<img *ngIf="visible" [src]="banners[current_slide].img" class="slide_image" [@animate_slider]="state_name">

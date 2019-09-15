@@ -1,17 +1,15 @@
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
 
 @NgModule({
   imports: [
-    
     AppRoutingModule,
-    
     AppModule,
-    
+    BrowserAnimationsModule,
     BrowserTransferStateModule
   ],
   providers: [],

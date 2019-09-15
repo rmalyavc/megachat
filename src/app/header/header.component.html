@@ -1,4 +1,4 @@
-<img [src]="logo_icon" class="tool_icon logo" routerLink="/chat">
+<img [src]="logo_icon" class="tool_icon logo" routerLink="">
 <div class="header_tools">
 	<img *ngIf="current_user" [src]="logout_icon" class="tool_icon login_icon" (click)="logout()">
 	<span *ngIf="current_user" class="white_text greeting">Hi, {{ current_user.login }}</span>
