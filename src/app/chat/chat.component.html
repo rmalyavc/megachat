@@ -12,8 +12,12 @@
 <div class="room_wrapper">
 	<div class="messages_wrapper" #scrollMe [scrollTop]="scrollMe.scrollHeight">
 		<h2 *ngIf="current_room && current_room.full_name" class="text_header gray_text">Chat with {{ current_room.full_name }}</h2>
-		<div *ngFor="let message of messages;" class="message_wrapper" [class.owner]="message.author == current_user.id">
-			<div class="message">{{ message.text }}</div>
+		<div *ngFor="let message of messages; let i = index;" class="message_wrapper" [class.owner]="message.author == current_user.id">
+			
+				<div class="message">
+					<span class="gray_text">{{ message.author_name }}&nbsp;{{ message.time }}</span><br>
+					{{ message.text }}
+				</div>
 		</div>
 	</div>
 	<div *ngIf="form_data.room_id" class="send_section">

@@ -5,14 +5,14 @@ const util = require('util');
 const conn = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "11111111",
+	// password: "11111111",
 	database: "megachat"
 });
 
 const db_conn = mysql.createConnection({
 	host: "localhost",
 	user: "root",
-	password: "11111111"
+	// password: "11111111"
 });
 
 const query = util.promisify(db_conn.query).bind(db_conn);
